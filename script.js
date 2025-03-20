@@ -6,15 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const löschenKnopf = document.getElementById('löschen');
     const fertigKnopf = document.getElementById('fertig');
 
-    const speichereEinträge = (einträge) => {
-        localStorage.setItem('einträge', JSON.stringify(einträge));
-    };
-
-    const ladeEinträge = () => {
-        const gespeicherteEinträge = localStorage.getItem('einträge');
-        return gespeicherteEinträge ? JSON.parse(gespeicherteEinträge) : [];
-    };
-
     const erstelleEintrag = (text) => {
         const eintrag = document.createElement('div');
         eintrag.className = 'eintrag';
@@ -30,12 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
         eintragsListe.appendChild(eintrag);
     };
 
-    const aktualisiereAnzeige = () => {
-        eintragsListe.innerHTML = '';
-        const einträge = ladeEinträge();
-        einträge.forEach(eintrag => erstelleEintrag(eintrag.text));
-    };
-
     const holeAusgewählteEinträge = () => {
         return Array.from(document.querySelectorAll('.eintrag'))
             .filter(eintrag => eintrag.querySelector('input[type="checkbox"]').checked);
@@ -44,9 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hinzufügenKnopf.addEventListener('click', () => {
         const eintragText = neuerEintragEingabe.value;
         if (eintragText) {
-            const einträge = ladeEinträge();
-            einträge.push({ text: eintragText });
-            speichereEinträge(einträge);
             erstelleEintrag(eintragText);
             neuerEintragEingabe.value = '';
         }
@@ -58,12 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const beschriftung = ausgewählteEinträge[0].querySelector('label');
             const neuerText = neuerEintragEingabe.value;
             if (neuerText) {
-                const einträge = ladeEinträge();
-                const index = einträge.findIndex(eintrag => eintrag.text === beschriftung.textContent);
-                if (index !== -1) {
-                    einträge[index].text = neuerText;
-                    speichereEinträge(einträge);
-                }
                 beschriftung.textContent = neuerText;
                 neuerEintragEingabe.value = '';
             }
@@ -78,17 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     löschenKnopf.addEventListener('click', () => {
-        const einträge = ladeEinträge();
         holeAusgewählteEinträge().forEach(eintrag => {
-            const beschriftung = eintrag.querySelector('label').textContent;
-            const index = einträge.findIndex(e => e.text === beschriftung);
-            if (index !== -1) {
-                einträge.splice(index, 1);
-                eintragsListe.removeChild(eintrag);
-            }
+            eintragsListe.removeChild(eintrag);
         });
-        speichereEinträge(einträge);
     });
-
-    aktualisiereAnzeige();
 });
