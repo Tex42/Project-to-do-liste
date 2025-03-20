@@ -1,68 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Holen der HTML-Elemente
-    const eintragsListe = document.getElementById('eintragsListe'); // Das Element, das die Liste der Einträge enthält
-    const hinzufügenKnopf = document.getElementById('hinzufügen'); // Der Knopf zum Hinzufügen neuer Einträge
-    const neuerEintragEingabe = document.getElementById('neuerEintrag'); // Das Eingabefeld für neue Einträge
-    const bearbeitenKnopf = document.getElementById('bearbeiten'); // Der Knopf zum Bearbeiten ausgewählter Einträge
-    const löschenKnopf = document.getElementById('löschen'); // Der Knopf zum Löschen ausgewählter Einträge
-    const fertigKnopf = document.getElementById('fertig'); // Der Knopf zum Markieren ausgewählter Einträge als erledigt
+    const eintragsListe = document.getElementById('eintragsListe');
+    const hinzufügenKnopf = document.getElementById('hinzufügen');
+    const neuerEintragEingabe = document.getElementById('neuerEintrag');
+    const bearbeitenKnopf = document.getElementById('bearbeiten');
+    const löschenKnopf = document.getElementById('löschen');
+    const fertigKnopf = document.getElementById('fertig');
 
-    // Funktion zum Erstellen eines neuen Eintrags
     const erstelleEintrag = (text) => {
-        const eintrag = document.createElement('div'); // Erstellen eines neuen div-Elements für den Eintrag
-        eintrag.className = 'eintrag'; // Hinzufügen einer Klasse zum Eintrag
+        const eintrag = document.createElement('div');
+        eintrag.className = 'eintrag';
 
-        const kontrollkästchen = document.createElement('input'); // Erstellen eines neuen input-Elements für das Kontrollkästchen
-        kontrollkästchen.type = 'checkbox'; // Setzen des Typs des input-Elements auf "checkbox"
+        const kontrollkästchen = document.createElement('input');
+        kontrollkästchen.type = 'checkbox';
 
-        const beschriftung = document.createElement('label'); // Erstellen eines neuen label-Elements für die Beschriftung
-        beschriftung.textContent = text; // Setzen des Textinhalts der Beschriftung auf den übergebenen Text
+        const beschriftung = document.createElement('label');
+        beschriftung.textContent = text;
 
-        eintrag.appendChild(kontrollkästchen); // Hinzufügen des Kontrollkästchens zum Eintrag
-        eintrag.appendChild(beschriftung); // Hinzufügen der Beschriftung zum Eintrag
-        eintragsListe.appendChild(eintrag); // Hinzufügen des Eintrags zur Liste der Einträge
+        eintrag.appendChild(kontrollkästchen);
+        eintrag.appendChild(beschriftung);
+        eintragsListe.appendChild(eintrag);
     };
 
-    // Funktion zum Holen der ausgewählten Einträge
     const holeAusgewählteEinträge = () => {
-        return Array.from(document.querySelectorAll('.eintrag')) // Erstellen eines Arrays aus allen Elementen mit der Klasse "eintrag"
-            .filter(eintrag => eintrag.querySelector('input[type="checkbox"]').checked); // Filtern der Einträge, die ausgewählt sind (Kontrollkästchen ist aktiviert)
+        return Array.from(document.querySelectorAll('.eintrag'))
+            .filter(eintrag => eintrag.querySelector('input[type="checkbox"]').checked);
     };
 
-    // Event-Listener für den Hinzufügen-Knopf
     hinzufügenKnopf.addEventListener('click', () => {
-        const eintragText = neuerEintragEingabe.value; // Holen des Textes aus dem Eingabefeld
-        if (eintragText) { // Überprüfen, ob das Eingabefeld nicht leer ist
-            erstelleEintrag(eintragText); // Erstellen eines neuen Eintrags mit dem Text aus dem Eingabefeld
-            neuerEintragEingabe.value = ''; // Leeren des Eingabefelds
+        const eintragText = neuerEintragEingabe.value;
+        if (eintragText) {
+            erstelleEintrag(eintragText);
+            neuerEintragEingabe.value = '';
         }
     });
 
-    // Event-Listener für den Bearbeiten-Knopf
     bearbeitenKnopf.addEventListener('click', () => {
-        const ausgewählteEinträge = holeAusgewählteEinträge(); // Holen der ausgewählten Einträge
-        if (ausgewählteEinträge.length > 0) { // Überprüfen, ob mindestens ein Eintrag ausgewählt ist
-            const beschriftung = ausgewählteEinträge[0].querySelector('label'); // Holen der Beschriftung des ersten ausgewählten Eintrags
-            const neuerText = neuerEintragEingabe.value; // Holen des neuen Textes aus dem Eingabefeld
-            if (neuerText) { // Überprüfen, ob das Eingabefeld nicht leer ist
-                beschriftung.textContent = neuerText; // Setzen des Textinhalts der Beschriftung auf den neuen Text
-                neuerEintragEingabe.value = ''; // Leeren des Eingabefelds
+        const ausgewählteEinträge = holeAusgewählteEinträge();
+        if (ausgewählteEinträge.length > 0) {
+            const beschriftung = ausgewählteEinträge[0].querySelector('label');
+            const neuerText = neuerEintragEingabe.value;
+            if (neuerText) {
+                beschriftung.textContent = neuerText;
+                neuerEintragEingabe.value = '';
             }
-            ausgewählteEinträge[0].querySelector('input[type="checkbox"]').checked = false; // Deaktivieren des Kontrollkästchens des ersten ausgewählten Eintrags
+            ausgewählteEinträge[0].querySelector('input[type="checkbox"]').checked = false;
         }
     });
 
-    // Event-Listener für den Fertig-Knopf
     fertigKnopf.addEventListener('click', () => {
-        holeAusgewählteEinträge().forEach(eintrag => { // Für jeden ausgewählten Eintrag
-            eintrag.style.textDecoration = 'line-through'; // Durchstreichen des Textes des Eintrags
+        holeAusgewählteEinträge().forEach(eintrag => {
+            eintrag.style.textDecoration = 'line-through';
         });
     });
 
-    // Event-Listener für den Löschen-Knopf
     löschenKnopf.addEventListener('click', () => {
-        holeAusgewählteEinträge().forEach(eintrag => { // Für jeden ausgewählten Eintrag
-            eintragsListe.removeChild(eintrag); // Entfernen des Eintrags aus der Liste
+        holeAusgewählteEinträge().forEach(eintrag => {
+            eintragsListe.removeChild(eintrag);
         });
     });
 });
