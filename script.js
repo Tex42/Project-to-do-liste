@@ -1,102 +1,83 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {                       // Wartet darauf, dass das DOM vollständig geladen ist, bevor der Code ausgeführt wird.
     const eintragsListe = document.getElementById('eintragsListe');
     const hinzufügenKnopf = document.getElementById('hinzufügen');
     const neuerEintragEingabe = document.getElementById('neuerEintrag');
-    const bearbeitenKnopf = document.getElementById('bearbeiten');
     const löschenKnopf = document.getElementById('löschen');
+    const bearbeitenKnopf = document.getElementById('bearbeiten');
     const fertigKnopf = document.getElementById('fertig');
 
-    const speichereEinträge = (einträge) => localStorage.setItem('todoListe', JSON.stringify(einträge));
-    const ladeEinträge = () => JSON.parse(localStorage.getItem('todoListe')) || [];
+    const speichereEinträge = (einträge) => {                               // Definiert eine Funktion 'speichereEinträge', die das Array 'einträge' als Parameter nimmt.
+        localStorage.setItem('todoListe', JSON.stringify(einträge));        // Speichert das Array 'einträge' als JSON-String im Local Storage unter dem Schlüssel 'todoListe'.
+    };
 
-    const erstelleEintrag = (text, checked = false, durchgestrichen = false) => {
-        const eintrag = document.createElement('div');
-        eintrag.className = 'eintrag';
-
-        const kontrollkästchen = document.createElement('input');
-        kontrollkästchen.type = 'checkbox';
-        kontrollkästchen.checked = checked;
-
-        const beschriftung = document.createElement('label');
-        beschriftung.textContent = text;
-        beschriftung.style.textDecoration = durchgestrichen ? 'line-through' : 'none';
-
-        eintrag.appendChild(kontrollkästchen);
-        eintrag.appendChild(beschriftung);
-        eintragsListe.appendChild(eintrag);
-
-        kontrollkästchen.addEventListener('change', () => {
-            const einträge = ladeEinträge();
-            const index = einträge.findIndex(e => e.text === text);
-            if (index !== -1) {
-                einträge[index].checked = kontrollkästchen.checked;
-                speichereEinträge(einträge);
-            }
-        });
+    const ladeEinträge = () => {                                            // Definiert eine Funktion 'ladeEinträge', die keine Parameter hat.
+        return JSON.parse(localStorage.getItem('todoListe')) || [];         // Lädt den JSON-String aus dem Local Storage unter dem Schlüssel 'todoListe', parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
     };
 
     const aktualisiereAnzeige = () => {
         eintragsListe.innerHTML = '';
-        ladeEinträge().forEach(eintrag => erstelleEintrag(eintrag.text, eintrag.checked, eintrag.durchgestrichen));
-    };
+        ladeEinträge().forEach((eintrag, index) => {                        // Iteriert über jedes Element im Array, das von 'ladeEinträge' zurückgegeben wird. 'eintrag' ist das aktuelle Element und 'index' ist der Index des aktuellen Elements.
+            const eintragElement = document.createElement('li');
 
-    const holeAusgewählteEinträge = () => {
-        return Array.from(document.querySelectorAll('.eintrag'))
-            .filter(eintrag => eintrag.querySelector('input[type="checkbox"]').checked);
+            const kontrollKaestchen = document.createElement('input');
+            kontrollKaestchen.type = 'checkbox';
+            kontrollKaestchen.checked = eintrag.abgehackt;
+
+            const beschriftung = document.createElement('label');
+            beschriftung.textContent = eintrag.text;
+            beschriftung.style.textDecoration = eintrag.durchgestrichen ? 'line-through' : 'none';
+
+            kontrollKaestchen.addEventListener('change', () => {
+                const einträge = ladeEinträge();
+                einträge[index].abgehackt = kontrollKaestchen.checked;
+                speichereEinträge(einträge);
+            });
+
+            eintragElement.append(kontrollKaestchen, beschriftung);
+            eintragsListe.appendChild(eintragElement);
+        });
     };
 
     hinzufügenKnopf.addEventListener('click', () => {
-        const eintragText = neuerEintragEingabe.value;
-        if (eintragText) {
-            const einträge = ladeEinträge();
-            einträge.push({ text: eintragText, checked: false, durchgestrichen: false });
-            speichereEinträge(einträge);
-            erstelleEintrag(eintragText);
-            neuerEintragEingabe.value = '';
-        }
+        const text = neuerEintragEingabe.value;
+        if (!text) return;
+
+        const einträge = ladeEinträge();
+        einträge.push({ text, abgehackt: false, durchgestrichen: false });
+        speichereEinträge(einträge);                                            // Speichert die aktualisierten Einträge im Local Storage.
+        aktualisiereAnzeige();                                                  // Aktualisiert die Anzeige der Einträge.
+    });
+
+    löschenKnopf.addEventListener('click', () => {
+        const einträge = ladeEinträge().filter(eintrag => !eintrag.abgehackt);  // Lädt die Einträge aus dem Local Storage, filtert die abgehakten Einträge heraus und speichert die verbleibenden Einträge in der Variable 'einträge'.
+        speichereEinträge(einträge);
+        aktualisiereAnzeige();
     });
 
     bearbeitenKnopf.addEventListener('click', () => {
-        const ausgewählteEinträge = holeAusgewählteEinträge();
-        if (ausgewählteEinträge.length > 0) {
-            const beschriftung = ausgewählteEinträge[0].querySelector('label');
-            const neuerText = neuerEintragEingabe.value;
-            if (neuerText) {
-                const einträge = ladeEinträge();
-                const index = einträge.findIndex(e => e.text === beschriftung.textContent);
-                if (index !== -1) {
-                    einträge[index].text = neuerText;
-                    speichereEinträge(einträge);
-                }
-                beschriftung.textContent = neuerText;
-                neuerEintragEingabe.value = '';
+        const text = neuerEintragEingabe.value;
+        if (!text) return;
+
+        const einträge = ladeEinträge();
+        einträge.forEach(eintrag => {
+            if (eintrag.abgehackt) {
+                eintrag.text = text;
             }
-            ausgewählteEinträge[0].querySelector('input[type="checkbox"]').checked = false;
-        }
+        });
+        speichereEinträge(einträge);
+        aktualisiereAnzeige();
     });
 
     fertigKnopf.addEventListener('click', () => {
         const einträge = ladeEinträge();
-        holeAusgewählteEinträge().forEach(eintrag => {
-            const beschriftung = eintrag.querySelector('label');
-            const index = einträge.findIndex(e => e.text === beschriftung.textContent);
-            if (index !== -1) {
-                einträge[index].durchgestrichen = !einträge[index].durchgestrichen;
-                speichereEinträge(einträge);
-                beschriftung.style.textDecoration = einträge[index].durchgestrichen ? 'line-through' : 'none';
+        einträge.forEach(eintrag => {
+            if (eintrag.abgehackt) {                                            // Überprüft, ob der Eintrag abgehakt ist.
+                eintrag.durchgestrichen = !eintrag.durchgestrichen;             // Wenn der Eintrag abgehakt ist, wird der 'durchgestrichen'-Status des Eintrags umgekehrt.
             }
         });
-    });
-
-    löschenKnopf.addEventListener('click', () => {
-        let einträge = ladeEinträge();
-        holeAusgewählteEinträge().forEach(eintrag => {
-            const beschriftung = eintrag.querySelector('label').textContent;
-            einträge = einträge.filter(e => e.text !== beschriftung);
-            eintragsListe.removeChild(eintrag);
-        });
         speichereEinträge(einträge);
+        aktualisiereAnzeige();
     });
 
-    aktualisiereAnzeige();
+    aktualisiereAnzeige();                                                      // Ruft die Funktion 'aktualisiereAnzeige' auf, um die Anzeige der Einträge zu initialisieren.
 });
