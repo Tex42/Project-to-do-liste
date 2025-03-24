@@ -18,21 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {                       // W
         eintragsListe.innerHTML = '';
         ladeEinträge().forEach((eintrag, index) => {                        // Iteriert über jedes Element im Array, das von 'ladeEinträge' zurückgegeben wird. 'eintrag' ist das aktuelle Element und 'index' ist der Index des aktuellen Elements.
             const eintragElement = document.createElement('li');
-
+    
             const kontrollKaestchen = document.createElement('input');
             kontrollKaestchen.type = 'checkbox';
             kontrollKaestchen.checked = eintrag.abgehackt;
-
+    
             const beschriftung = document.createElement('label');
             beschriftung.textContent = eintrag.text;
             beschriftung.style.textDecoration = eintrag.durchgestrichen ? 'line-through' : 'none';
-
+    
             kontrollKaestchen.addEventListener('change', () => {
                 const einträge = ladeEinträge();
                 einträge[index].abgehackt = kontrollKaestchen.checked;
                 speichereEinträge(einträge);
             });
-
+    
             eintragElement.append(kontrollKaestchen, beschriftung);
             eintragsListe.appendChild(eintragElement);
         });

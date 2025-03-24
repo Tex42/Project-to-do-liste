@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+#eintragsListe {
+    list-style: disc;
+    padding: 0;
+    margin: 0;
+}
+
+#eintragsListe li {
+    word-break: break-word;
+    white-space: normal;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+.eingabefenster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.knöpfe {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
