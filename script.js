@@ -1,83 +1,85 @@
-document.addEventListener('DOMContentLoaded', () => {                       // Wartet darauf, dass das DOM vollständig geladen ist, bevor der Code ausgeführt wird.
+document.addEventListener('DOMContentLoaded', () => {
     const eintragsListe = document.getElementById('eintragsListe');
-    const hinzufügenKnopf = document.getElementById('hinzufügen');
-    const neuerEintragEingabe = document.getElementById('neuerEintrag');
-    const löschenKnopf = document.getElementById('löschen');
-    const bearbeitenKnopf = document.getElementById('bearbeiten');
-    const fertigKnopf = document.getElementById('fertig');
+    const hinzufügenButton = document.getElementById('hinzufügen');
+    const Eingabefeld = document.getElementById('neuerEintrag');
+    const löschenButton = document.getElementById('löschen');
+    const bearbeitenButton = document.getElementById('bearbeiten');
+    const fertigButton = document.getElementById('fertig');
 
-    const speichereEinträge = (einträge) => {                               // Definiert eine Funktion 'speichereEinträge', die das Array 'einträge' als Parameter nimmt.
-        localStorage.setItem('todoListe', JSON.stringify(einträge));        // Speichert das Array 'einträge' als JSON-String im Local Storage unter dem Schlüssel 'todoListe'.
+    const speichereTodoListe = (todoListe) => {                                             // Funktion speichereTodoListe, nimmt das Array todoListe als Parameter.
+        localStorage.setItem('todoListe', JSON.stringify(todoListe));                       // Speichert das Array todoListe als JSON-String im Local Storage mit dem Schlüssel namen todoListe.
     };
 
-    const ladeEinträge = () => {                                            // Definiert eine Funktion 'ladeEinträge', die keine Parameter hat.
-        return JSON.parse(localStorage.getItem('todoListe')) || [];         // Lädt den JSON-String aus dem Local Storage unter dem Schlüssel 'todoListe', parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
+    const ladeTodoListe = () => {                                            
+        return JSON.parse(localStorage.getItem('todoListe')) || [];                         // Lädt den JSON-String aus dem Local Storage mit dem Schlüssel namen todoListe, parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
     };
 
     const aktualisiereAnzeige = () => {
-        eintragsListe.innerHTML = '';
-        ladeEinträge().forEach((eintrag, index) => {                        // Iteriert über jedes Element im Array, das von 'ladeEinträge' zurückgegeben wird. 'eintrag' ist das aktuelle Element und 'index' ist der Index des aktuellen Elements.
+        eintragsListe.innerHTML = '';                                                       // Leert den Inhalt des HTML Elements eintragsListe sonst habe ich doppelte Einträge.
+        ladeTodoListe().forEach((todoItem, index) => {                                      // Hier rufe ich jedes Array mit dem Element (todoItem) und Index (index) auf.
             const eintragElement = document.createElement('li');
     
-            const kontrollKaestchen = document.createElement('input');
-            kontrollKaestchen.type = 'checkbox';
-            kontrollKaestchen.checked = eintrag.abgehackt;
+            const kontrollKasten = document.createElement('input');
+            kontrollKasten.type = 'checkbox';                                               // Setzt den Typ des 'input'-Elements auf 'checkbox'.
+            kontrollKasten.checked = todoItem.abgehackt;                                    // Setzt den 'checked'-Status des Kontrollkästchens basierend auf dem 'abgehackt'-Status des aktuellen Eintrags.
     
             const beschriftung = document.createElement('label');
-            beschriftung.textContent = eintrag.text;
-            beschriftung.style.textDecoration = eintrag.durchgestrichen ? 'line-through' : 'none';
+            beschriftung.textContent = todoItem.text;                                       // Setzt den Text des 'label'-Elements basierend auf dem Text des aktuellen Eintrags.
+            beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des 'label'-Elements basierend auf dem 'durchgestrichen'-Status des aktuellen Eintrags.
     
-            kontrollKaestchen.addEventListener('change', () => {
-                const einträge = ladeEinträge();
-                einträge[index].abgehackt = kontrollKaestchen.checked;
-                speichereEinträge(einträge);
+            kontrollKasten.addEventListener('change', () => {                               // Hier wird ein EventListener hinzugefügt, der auf Änderungen des Kontrollkästchens reagiert.
+                const itemKK = ladeTodoListe();
+                itemKK[index].abgehackt = kontrollKasten.checked;
+                speichereTodoListe(itemKK);
             });
     
-            eintragElement.append(kontrollKaestchen, beschriftung);
-            eintragsListe.appendChild(eintragElement);
+            eintragElement.append(kontrollKasten, beschriftung);                            // Fügt das Kontrollkästchen und die Beschriftung zum Eintragselement hinzu.
+            eintragsListe.appendChild(eintragElement);                                      // Fügt das Eintragselement zur Eintragsliste hinzu.
         });
     };
 
-    hinzufügenKnopf.addEventListener('click', () => {
-        const text = neuerEintragEingabe.value;
-        if (!text) return;
+// ----------------------------------------------------------Hier sind jetzt meine Buttons------------------------------------------------------------------
 
-        const einträge = ladeEinträge();
-        einträge.push({ text, abgehackt: false, durchgestrichen: false });
-        speichereEinträge(einträge);                                            // Speichert die aktualisierten Einträge im Local Storage.
-        aktualisiereAnzeige();                                                  // Aktualisiert die Anzeige der Einträge.
+    hinzufügenButton.addEventListener('click', () => {
+        const textHB = Eingabefeld.value;
+        if (!textHB) return;
+
+        const itemHB = ladeTodoListe();
+        itemHB.push({ text: textHB, abgehackt: false, durchgestrichen: false });
+        speichereTodoListe(itemHB);                                                           // Speichert die aktualisierten Einträge im Local Storage.
+        aktualisiereAnzeige();                                                              // Aktualisiert die Anzeige der Einträge.
     });
 
-    löschenKnopf.addEventListener('click', () => {
-        const einträge = ladeEinträge().filter(eintrag => !eintrag.abgehackt);  // Lädt die Einträge aus dem Local Storage, filtert die abgehakten Einträge heraus und speichert die verbleibenden Einträge in der Variable 'einträge'.
-        speichereEinträge(einträge);
+    löschenButton.addEventListener('click', () => {
+        const itemLB = ladeTodoListe().filter(todoItem => !todoItem.abgehackt);               // Lädt die Einträge aus dem Local Storage, filtert die abgehakten Einträge heraus und speichert die verbleibenden Einträge in der Variable 'todoListe'.
+        speichereTodoListe(itemLB);
         aktualisiereAnzeige();
     });
 
-    bearbeitenKnopf.addEventListener('click', () => {
-        const text = neuerEintragEingabe.value;
-        if (!text) return;
+    bearbeitenButton.addEventListener('click', () => {
+        const textBB = Eingabefeld.value;
+        if (!textBB) return;
 
-        const einträge = ladeEinträge();
-        einträge.forEach(eintrag => {
-            if (eintrag.abgehackt) {
-                eintrag.text = text;
+        const itemBB = ladeTodoListe();
+        itemBB.forEach(todoItem => {
+            if (todoItem.abgehackt) {
+                todoItem.text = textBB;
             }
         });
-        speichereEinträge(einträge);
+        speichereTodoListe(itemBB);
         aktualisiereAnzeige();
     });
 
-    fertigKnopf.addEventListener('click', () => {
-        const einträge = ladeEinträge();
-        einträge.forEach(eintrag => {
-            if (eintrag.abgehackt) {                                            // Überprüft, ob der Eintrag abgehakt ist.
-                eintrag.durchgestrichen = !eintrag.durchgestrichen;             // Wenn der Eintrag abgehakt ist, wird der 'durchgestrichen'-Status des Eintrags umgekehrt.
+    fertigButton.addEventListener('click', () => {
+        const itemFB = ladeTodoListe();
+        itemFB.forEach(todoItem => {
+            if (todoItem.abgehackt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
+                todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der 'durchgestrichen'-Status des Eintrags umgekehrt.
             }
         });
-        speichereEinträge(einträge);
+        speichereTodoListe(itemFB);
         aktualisiereAnzeige();
     });
 
-    aktualisiereAnzeige();                                                      // Ruft die Funktion 'aktualisiereAnzeige' auf, um die Anzeige der Einträge zu initialisieren.
+    aktualisiereAnzeige();                                                                  // Ruft die Funktion 'aktualisiereAnzeige' auf, um die Anzeige der Einträge zu initialisieren.
 });
