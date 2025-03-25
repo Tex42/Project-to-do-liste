@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('todoListe')) || [];                         // Lädt den JSON-String aus dem Local Storage mit dem Schlüssel namen todoListe, parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
     };
 
+// ----------------Meine Aktualisierungs Funktion----------------
+
     const aktualisiereAnzeige = () => {
         eintragsListe.innerHTML = '';                                                       // Leert den Inhalt des HTML Elements eintragsListe sonst habe ich doppelte Einträge.
         ladeTodoListe().forEach((todoItem, index) => {                                      // Hier rufe ich jedes Array mit dem Element (todoItem) und Index (index) auf.
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-// ----------------------------------------------------------Hier sind jetzt meine Buttons------------------------------------------------------------------
+// ----------------------------------------------------------Hier sind jetzt meine Buttons----------------------------------------------------------
 
     hinzufügenButton.addEventListener('click', () => {
         const textHB = Eingabefeld.value;
