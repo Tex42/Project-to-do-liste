@@ -41,6 +41,13 @@ const aktualisiereAnzeige = () => {
 
 // ----------------------------------------------------------Hier sind jetzt meine Buttons----------------------------------------------------------
 
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        hinzufügenButton.click();
+    }   
+});
+
 hinzufügenButton.addEventListener('click', () => {
     const textHB = Eingabefeld.value;
     if (!textHB) return;
@@ -48,7 +55,8 @@ hinzufügenButton.addEventListener('click', () => {
     const itemHB = ladeTodoListe();
     itemHB.push({ text: textHB, abgehackt: false, durchgestrichen: false });
     speichereTodoListe(itemHB);                                                           // Speichert die aktualisierten Einträge im Local Storage.
-    aktualisiereAnzeige();                                                              // Aktualisiert die Anzeige der Einträge.
+    aktualisiereAnzeige();   
+    Eingabefeld.value = "";                                                           // Aktualisiert die Anzeige der Einträge.
 });
 
 löschenButton.addEventListener('click', () => {
@@ -69,6 +77,7 @@ bearbeitenButton.addEventListener('click', () => {
     });
     speichereTodoListe(itemBB);
     aktualisiereAnzeige();
+    Eingabefeld.value = "";
 });
 
 fertigButton.addEventListener('click', () => {
