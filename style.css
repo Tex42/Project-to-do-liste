@@ -28,14 +28,6 @@ footer {
     text-align: center;
 }
 
-#eintragsListe {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 400px;
-}
-
 #eintragsListe li {
     word-break: break-word;
     width: 100%;
@@ -47,11 +39,6 @@ footer {
     border-radius: 5px;
     display: flex;
     align-items: center;
-}
-
-#eintragsListe li label {
-    flex-grow: 1;
-    margin-left: 10px;
 }
 
 .eingabefenster {
@@ -66,12 +53,11 @@ footer {
     border: 2px solid #ffcc00;
     border-radius: 5px;
     margin-bottom: 10px;
-    width: 100%;
-    max-width: 400px;
 }
 
 .knöpfe {
     margin-top: 20px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     gap: 10px;
