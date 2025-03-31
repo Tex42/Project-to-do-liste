@@ -21,12 +21,12 @@ const aktualisiereAnzeige = () => {
         const eintragElement = document.createElement('li');
     
         const kontrollKasten = document.createElement('input');
-        kontrollKasten.type = 'checkbox';                                               // Setzt den Typ des 'input'-Elements auf 'checkbox'.
-        kontrollKasten.checked = todoItem.abgehackt;                                    // Setzt den 'checked'-Status des Kontrollkästchens basierend auf dem 'abgehackt'-Status des aktuellen Eintrags.
+        kontrollKasten.type = 'checkbox';                                               // Setzt den Typ des input Elements auf checkbox.
+        kontrollKasten.checked = todoItem.abgehackt;                                    // Setzt den checked Status des Kontrollkästchens basierend auf dem abgehackt Status des Eintrags.
     
         const beschriftung = document.createElement('label');
-        beschriftung.textContent = todoItem.text;                                       // Setzt den Text des 'label'-Elements basierend auf dem Text des aktuellen Eintrags.
-        beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des 'label'-Elements basierend auf dem 'durchgestrichen'-Status des aktuellen Eintrags.
+        beschriftung.textContent = todoItem.text;                                       // Setzt den Text des label Elements basierend auf dem Text des aktuellen Eintrags.
+        beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des label Elements basierend auf dem durchgestrichen Status des Eintrags.
     
         kontrollKasten.addEventListener('change', () => {                               // Hier wird ein EventListener hinzugefügt, der auf Änderungen des Kontrollkästchens reagiert.
             const itemKK = ladeTodoListe();
@@ -84,11 +84,11 @@ fertigButton.addEventListener('click', () => {
     const itemFB = ladeTodoListe();
     itemFB.forEach(todoItem => {
         if (todoItem.abgehackt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
-            todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der 'durchgestrichen'-Status des Eintrags umgekehrt.
+            todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der durchgestrichen Status des Eintrags umgekehrt.
         }
     });
     speichereTodoListe(itemFB);
     aktualisiereAnzeige();
 });
 
-aktualisiereAnzeige();                                                                  // Ruft die Funktion 'aktualisiereAnzeige' auf, um die Anzeige der Einträge zu initialisieren.
+aktualisiereAnzeige();                                                                  // Ruft die Funktion aktualisiereAnzeige auf, um die Anzeige der Einträge zu initialisieren.
