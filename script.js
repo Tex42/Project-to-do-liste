@@ -5,12 +5,12 @@ const löschenButton = document.getElementById('löschen');
 const bearbeitenButton = document.getElementById('bearbeiten');
 const fertigButton = document.getElementById('fertig');
 
-const speichereTodoListe = (todoListe) => {                                             // Funktion speichereTodoListe, nimmt das Array todoListe als Parameter.
-    localStorage.setItem('todoListe', JSON.stringify(todoListe));                       // Speichert das Array todoListe als JSON-String im Local Storage mit dem Schlüssel namen todoListe.
+const speichereTodoListe = (todoListe) => {                                                     // Funktion speichereTodoListe, nimmt das Array todoListe als Parameter.
+    localStorage.setItem('todoListe', JSON.stringify(todoListe));                               // Speichert das Array todoListe als JSON-String im Local Storage mit dem Schlüssel namen todoListe.
 };
 
 const ladeTodoListe = () => {                                            
-    return JSON.parse(localStorage.getItem('todoListe')) || [];                         // Lädt den JSON-String aus dem Local Storage mit dem Schlüssel namen todoListe, parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
+    return JSON.parse(localStorage.getItem('todoListe')) || [];                                 // Lädt den JSON-String aus dem Local Storage mit dem Schlüssel namen todoListe, parst ihn in ein Array und gibt dieses Array zurück. Wenn nichts gefunden wird, wird ein leeres Array zurückgegeben.
 };
 
 // ----------------Meine Aktualisierungs Funktion----------------
@@ -25,7 +25,7 @@ const aktualisiereAnzeige = () => {
         kontrollKasten.checked = todoItem.abgehackt;                                    // Setzt den checked Status des Kontrollkästchens basierend auf dem abgehackt Status des Eintrags.
     
         const beschriftung = document.createElement('label');
-        beschriftung.textContent = todoItem.text;                                       // Setzt den Text des label Elements basierend auf dem Text des aktuellen Eintrags.
+        beschriftung.textContent = todoItem.text;                                                // Setzt den Text des label Elements basierend auf dem Text des aktuellen Eintrags.
         beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des label Elements basierend auf dem durchgestrichen Status des Eintrags.
     
         kontrollKasten.addEventListener('change', () => {                               // Hier wird ein EventListener hinzugefügt, der auf Änderungen des Kontrollkästchens reagiert.
