@@ -28,14 +28,14 @@ const aktualisiereAnzeige = () => {
     
         const kontrollKasten = document.createElement('input');
         kontrollKasten.type = 'checkbox';                                               // Setzt den Typ des input Elements auf checkbox.
-        kontrollKasten.checked = todoItem.abgehackt;                                    // Setzt den checked Status des Kontrollkästchens basierend auf dem abgehackt Status des Eintrags.
+        kontrollKasten.checked = todoItem.abgehakt;                                    // Setzt den checked Status des Kontrollkästchens basierend auf dem abgehakt Status des Eintrags.
     
         const beschriftung = document.createElement('label');
         beschriftung.textContent = todoItem.text;                                                // Setzt den Text des label Elements basierend auf dem Text des aktuellen Eintrags.
         beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des label Elements basierend auf dem durchgestrichen Status des Eintrags.
     
         kontrollKasten.addEventListener('change', () => {                               // Hier wird ein EventListener hinzugefügt, der auf Änderungen des Kontrollkästchens reagiert.
-            todoItem.abgehackt = kontrollKasten.checked;
+            todoItem.abgehakt = kontrollKasten.checked;
             speichereTodoListe(todoListe);
         });
     
@@ -47,16 +47,23 @@ const aktualisiereAnzeige = () => {
 // ----------------------------------------------------------Hier sind jetzt meine Buttons----------------------------------------------------------
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' && ladeTodoListe().every(todoItem => !todoItem.abgehackt)){
+    if (event.key === 'Enter' && ladeTodoListe().every(todoItem => !todoItem.abgehakt)){
         event.preventDefault();
         hinzufügenButton.click();
         }
+    else if (event.key === 'Enter' && ladeTodoListe().some(todoItem => todoItem.abgehakt)){
+        event.preventDefault();
+        bearbeitenButton.click();
+        }
+    else if (event.key === 'Delete' && ladeTodoListe().some(todoItem => todoItem.abgehakt)){
+        event.preventDefault();
+        löschenButton.click();
+        }
 });
 
-// warum geht das nicht?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // document.addEventListener('keydown', (event) => {
 //     ladeTodoListe().every((todoItem) => {
-//     if (event.key === 'Enter' && !todoItem.abgehackt){
+//     if (event.key === 'Enter' && !todoItem.abgehakt){
 //         event.preventDefault();
 //         hinzufügenButton.click();
 //         }
@@ -67,14 +74,14 @@ hinzufügenButton.addEventListener('click', () => {
     const textHB = Eingabefeld.value;
     if (!textHB) return;
 
-    itemHB = ladeTodoListe();
-    itemHB.push({ text: textHB, abgehackt: false, durchgestrichen: false });
+    const itemHB = ladeTodoListe();
+    itemHB.push({ text: textHB, abgehakt: false, durchgestrichen: false });
     speichernUndLaden(itemHB);
     Eingabefeld.value = "";
 });
 
 löschenButton.addEventListener('click', () => {
-    const itemLB = ladeTodoListe().filter(todoItem => !todoItem.abgehackt);               // Lädt die Einträge aus dem Local Storage, filtert die abgehakten Einträge heraus und speichert die verbleibenden Einträge in der Variable 'todoListe'.
+    const itemLB = ladeTodoListe().filter(todoItem => !todoItem.abgehakt);               // Lädt die Einträge aus dem Local Storage, filtert die abgehakten Einträge heraus und speichert die verbleibenden Einträge in der Variable 'todoListe'.
     speichernUndLaden(itemLB);
 });
 
@@ -84,7 +91,7 @@ bearbeitenButton.addEventListener('click', () => {
 
     const itemBB = ladeTodoListe();
     itemBB.forEach(todoItem => {
-        if (todoItem.abgehackt) {
+        if (todoItem.abgehakt) {
             todoItem.text = textBB;
         }
     });
@@ -95,7 +102,7 @@ bearbeitenButton.addEventListener('click', () => {
 fertigButton.addEventListener('click', () => {
     const itemFB = ladeTodoListe();
     itemFB.forEach(todoItem => {
-        if (todoItem.abgehackt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
+        if (todoItem.abgehakt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
             todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der durchgestrichen Status des Eintrags umgekehrt.
         }
     });
