@@ -38,6 +38,9 @@ const aktualisiereAnzeige = () => {
             todoItem.abgehakt = kontrollKasten.checked;
             speichereTodoListe(todoListe);
         });
+
+        let durchgestrichen = ladeTodoListe().filter(todoItem => todoItem.durchgestrichen).length;
+        zahl.innerText = `${durchgestrichen} von ${ladeTodoListe().length}`;
     
         eintragElement.append(kontrollKasten, beschriftung);                            // Fügt das Kontrollkästchen und die Beschriftung zum Eintragselement hinzu.
         eintragsListe.appendChild(eintragElement);                                      // Fügt das Eintragselement zur Eintragsliste hinzu.
