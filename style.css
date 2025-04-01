@@ -14,7 +14,6 @@ body {
 }
 
 header {
-    margin-bottom: 20px;
     background-color: #ffcc00;
     color: #474d57;
     padding: 10px;
@@ -35,7 +34,16 @@ footer {
     text-align: center;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    background-color: #3a3f47;
+}
+
 #eintragsListe li {
+    margin-top: 20px;
     word-break: break-word;
     width: 100%;
     max-width: 400px;
