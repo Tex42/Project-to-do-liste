@@ -8,7 +8,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #0046ae;
+    background-color: #474d57;
     color: #f1f1f1;
     box-sizing: border-box;
 }
@@ -16,8 +16,9 @@ body {
 header {
     margin-bottom: 20px;
     background-color: #ffcc00;
-    color: #0046ae;
+    color: #474d57;
     padding: 10px;
+    border: 5px solid #808080;
     width: 100%;
     text-align: center;
     font-size: 24px;
@@ -27,7 +28,8 @@ header {
 footer {
     margin-top: auto;
     background-color: #ffcc00;
-    color: #0046ae;
+    color: #474d57;
+    border: 5px solid #808080;
     padding: 10px;
     width: 100%;
     text-align: center;
@@ -39,7 +41,7 @@ footer {
     max-width: 400px;
     margin-bottom: 10px;
     background-color: #f1f1f1;
-    color: #0046ae;
+    color: #474d57;
     padding: 10px;
     border-radius: 5px;
     display: flex;
@@ -55,7 +57,7 @@ footer {
 
 .eingabefenster input {
     padding: 10px;
-    border: 2px solid #ffcc00;
+    border: 2px solid #808080;;
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -71,8 +73,8 @@ footer {
 .knöpfe button {
     padding: 10px 20px;
     background-color: #ffcc00;
-    color: #0046ae;
-    border: none;
+    color: #474d57;
+    border: 2px solid #808080;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
