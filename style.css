@@ -43,6 +43,7 @@ footer {
     background-color: #f1f1f1;
     color: #474d57;
     padding: 10px;
+    border: 2px solid #808080;
     border-radius: 5px;
     display: flex;
     align-items: center;
