@@ -23,7 +23,7 @@ function speichernUndLaden(todoListe) {
 const aktualisiereAnzeige = () => {
     eintragsListe.innerHTML = '';
     let todoListe = ladeTodoListe();                                                       // Leert den Inhalt des HTML Elements eintragsListe sonst habe ich doppelte Einträge.
-    todoListe.forEach((todoItem) => {                                      // Hier rufe ich jedes Array mit dem Element (todoItem) und Index (index) auf.
+    todoListe.forEach((todoItem) => {                                                   // Hier rufe ich jedes Array mit dem Element (todoItem) und Index (index) auf.
         const eintragElement = document.createElement('li');
     
         const kontrollKasten = document.createElement('input');
