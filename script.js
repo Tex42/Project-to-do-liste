@@ -135,4 +135,4 @@ window.addEventListener('DOMContentLoaded', () => {
     abbrechenButton.style.display = 'none';
 });
 
-aktualisiereAnzeige();                                                                  // Ruft die Funktion aktualisiereAnzeige auf, um die Anzeige der Einträge zu initialisieren.
+aktualisiereAnzeige();
