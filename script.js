@@ -4,8 +4,6 @@ const Eingabefeld = document.getElementById('neuerEintrag');
 const löschenButton = document.getElementById('löschen');
 const bearbeitenButton = document.getElementById('bearbeiten');
 const fertigButton = document.getElementById('fertig');
-const speichernButton = document.getElementById('speichern');
-const abbrechenButton = document.getElementById('abbrechen');
 
 const speichereTodoListe = (todoListe) => {                                                     // Funktion speichereTodoListe, nimmt das Array todoListe als Parameter.
     localStorage.setItem('todoListe', JSON.stringify(todoListe));                               // Speichert das Array todoListe als JSON-String im Local Storage mit dem Schlüssel namen todoListe.
@@ -24,28 +22,60 @@ function speichernUndLaden(todoListe) {
 
 const aktualisiereAnzeige = () => {
     eintragsListe.innerHTML = '';
-    let todoListe = ladeTodoListe();                                                       // Leert den Inhalt des HTML Elements eintragsListe sonst habe ich doppelte Einträge.
-    todoListe.forEach((todoItem) => {                                                   // Hier rufe ich jedes Array mit dem Element (todoItem) und Index (index) auf.
+    let todoListe = ladeTodoListe();
+
+    todoListe.forEach((todoItem) => {
         const eintragElement = document.createElement('li');
-    
+
         const kontrollKasten = document.createElement('input');
-        kontrollKasten.type = 'checkbox';                                               // Setzt den Typ des input Elements auf checkbox.
-        kontrollKasten.checked = todoItem.abgehakt;                                    // Setzt den checked Status des Kontrollkästchens basierend auf dem abgehakt Status des Eintrags.
-    
+        kontrollKasten.type = 'checkbox';
+        kontrollKasten.checked = todoItem.abgehakt;
+
         const beschriftung = document.createElement('label');
-        beschriftung.textContent = todoItem.text;                                                // Setzt den Text des label Elements basierend auf dem Text des aktuellen Eintrags.
-        beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';  // Setzt die Textdekoration des label Elements basierend auf dem durchgestrichen Status des Eintrags.
-    
-        kontrollKasten.addEventListener('change', () => {                               // Hier wird ein EventListener hinzugefügt, der auf Änderungen des Kontrollkästchens reagiert.
+        beschriftung.textContent = todoItem.text;
+        beschriftung.style.textDecoration = todoItem.durchgestrichen ? 'line-through' : 'none';
+
+        kontrollKasten.addEventListener('change', () => {
             todoItem.abgehakt = kontrollKasten.checked;
             speichereTodoListe(todoListe);
         });
 
-        let durchgestrichen = ladeTodoListe().filter(todoItem => todoItem.durchgestrichen).length;
-        zahl.innerText = `${durchgestrichen} von ${ladeTodoListe().length}`;
-    
-        eintragElement.append(kontrollKasten, beschriftung);                            // Fügt das Kontrollkästchen und die Beschriftung zum Eintragselement hinzu.
-        eintragsListe.appendChild(eintragElement);                                      // Fügt das Eintragselement zur Eintragsliste hinzu.
+        const speichernButton = document.createElement('button');
+        speichernButton.innerText = 'Speichern';
+        speichernButton.style.display = 'none';
+
+        const abbrechenButton = document.createElement('button');
+        abbrechenButton.innerText = 'Abbrechen';
+        abbrechenButton.style.display = 'none';
+
+        bearbeitenButton.addEventListener('click', () => {
+            if (todoItem.abgehakt) {
+                speichernButton.style.display = 'block';
+                abbrechenButton.style.display = 'block';
+                Eingabefeld.value = todoItem.text;
+            }
+        });
+
+        speichernButton.addEventListener('click', () => {
+            const textBB = Eingabefeld.value;
+            if (!textBB) return;
+
+            todoItem.text = textBB;
+            speichereTodoListe(todoListe);
+            Eingabefeld.value = '';
+            speichernButton.style.display = 'none';
+            abbrechenButton.style.display = 'none';
+            aktualisiereAnzeige();
+        });
+
+        abbrechenButton.addEventListener('click', () => {
+            speichernButton.style.display = 'none';
+            abbrechenButton.style.display = 'none';
+            Eingabefeld.value = '';
+        });
+
+        eintragElement.append(kontrollKasten, beschriftung, speichernButton, abbrechenButton);
+        eintragsListe.appendChild(eintragElement);
     });
 };
 
@@ -90,15 +120,15 @@ löschenButton.addEventListener('click', () => {
     speichernUndLaden(itemLB);
 });
 
-bearbeitenButton.addEventListener('click', () => {
-    ladeTodoListe().forEach(todoItem => {
-        if (todoItem.abgehakt) {
-            speichernButton.style.display = 'block';
-            abbrechenButton.style.display = 'block';
-            Eingabefeld.value = todoItem.text;
-        }
-    });
-});
+// bearbeitenButton.addEventListener('click', () => {
+//     ladeTodoListe().forEach(todoItem => {
+//         if (todoItem.abgehakt) {
+//             speichernButton.style.display = 'block';
+//             abbrechenButton.style.display = 'block';
+//             Eingabefeld.value = todoItem.text;
+//         }
+//     });
+// });
 
 fertigButton.addEventListener('click', () => {
     const itemFB = ladeTodoListe();
@@ -110,29 +140,29 @@ fertigButton.addEventListener('click', () => {
     speichernUndLaden(itemFB);
 });
 
-speichernButton.addEventListener('click', () => {
-    const textBB = Eingabefeld.value;
-    if (!textBB) return;
+// speichernButton.addEventListener('click', () => {
+//     const textBB = Eingabefeld.value;
+//     if (!textBB) return;
 
-    const itemBB = ladeTodoListe();
-    itemBB.forEach(todoItem => {
-        if (todoItem.abgehakt) {
-            todoItem.text = textBB;
-        }
-    });
-    speichernUndLaden(itemBB);
-    Eingabefeld.value = "";
-});
+//     const itemBB = ladeTodoListe();
+//     itemBB.forEach(todoItem => {
+//         if (todoItem.abgehakt) {
+//             todoItem.text = textBB;
+//         }
+//     });
+//     speichernUndLaden(itemBB);
+//     Eingabefeld.value = "";
+// });
 
-abbrechenButton.addEventListener('click', () => {
-    speichernButton.style.display = 'none';
-    abbrechenButton.style.display = 'none';
-    Eingabefeld.value = "";
-});
+// abbrechenButton.addEventListener('click', () => {
+//     speichernButton.style.display = 'none';
+//     abbrechenButton.style.display = 'none';
+//     Eingabefeld.value = "";
+// });
 
-window.addEventListener('DOMContentLoaded', () => {
-    speichernButton.style.display = 'none';
-    abbrechenButton.style.display = 'none';
-});
+// window.addEventListener('DOMContentLoaded', () => {
+//     speichernButton.style.display = 'none';
+//     abbrechenButton.style.display = 'none';
+// });
 
 aktualisiereAnzeige();
