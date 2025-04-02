@@ -95,6 +95,7 @@ bearbeitenButton.addEventListener('click', () => {
         if (todoItem.abgehakt) {
             speichernButton.style.display = 'block';
             abbrechenButton.style.display = 'block';
+            Eingabefeld.value = todoItem.text;
         }
     });
 });
