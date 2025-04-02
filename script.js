@@ -4,6 +4,8 @@ const Eingabefeld = document.getElementById('neuerEintrag');
 const löschenButton = document.getElementById('löschen');
 const bearbeitenButton = document.getElementById('bearbeiten');
 const fertigButton = document.getElementById('fertig');
+const speichernButton = document.getElementById('speichern');
+const abbrechenButton = document.getElementById('abbrechen');
 
 const speichereTodoListe = (todoListe) => {                                                     // Funktion speichereTodoListe, nimmt das Array todoListe als Parameter.
     localStorage.setItem('todoListe', JSON.stringify(todoListe));                               // Speichert das Array todoListe als JSON-String im Local Storage mit dem Schlüssel namen todoListe.
@@ -53,15 +55,15 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && ladeTodoListe().every(todoItem => !todoItem.abgehakt)){
         event.preventDefault();
         hinzufügenButton.click();
-        }
+    }
     else if (event.key === 'Enter' && ladeTodoListe().some(todoItem => todoItem.abgehakt)){
         event.preventDefault();
         bearbeitenButton.click();
-        }
+    }
     else if (event.key === 'Delete' && ladeTodoListe().some(todoItem => todoItem.abgehakt)){
         event.preventDefault();
         löschenButton.click();
-        }
+    }
 });
 
 // document.addEventListener('keydown', (event) => {
@@ -89,6 +91,25 @@ löschenButton.addEventListener('click', () => {
 });
 
 bearbeitenButton.addEventListener('click', () => {
+    ladeTodoListe().forEach(todoItem => {
+        if (todoItem.abgehakt) {
+            speichernButton.style.display = 'block';
+            abbrechenButton.style.display = 'block';
+        }
+    });
+});
+
+fertigButton.addEventListener('click', () => {
+    const itemFB = ladeTodoListe();
+    itemFB.forEach(todoItem => {
+        if (todoItem.abgehakt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
+            todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der durchgestrichen Status des Eintrags umgekehrt.
+        }
+    });
+    speichernUndLaden(itemFB);
+});
+
+speichernButton.addEventListener('click', () => {
     const textBB = Eingabefeld.value;
     if (!textBB) return;
 
@@ -102,14 +123,15 @@ bearbeitenButton.addEventListener('click', () => {
     Eingabefeld.value = "";
 });
 
-fertigButton.addEventListener('click', () => {
-    const itemFB = ladeTodoListe();
-    itemFB.forEach(todoItem => {
-        if (todoItem.abgehakt) {                                                       // Überprüft, ob der Eintrag abgehakt ist.
-            todoItem.durchgestrichen = !todoItem.durchgestrichen;                       // Wenn der Eintrag abgehakt ist, wird der durchgestrichen Status des Eintrags umgekehrt.
-        }
-    });
-    speichernUndLaden(itemFB);
+abbrechenButton.addEventListener('click', () => {
+    speichernButton.style.display = 'none';
+    abbrechenButton.style.display = 'none';
+    Eingabefeld.value = "";
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    speichernButton.style.display = 'none';
+    abbrechenButton.style.display = 'none';
 });
 
 aktualisiereAnzeige();                                                                  // Ruft die Funktion aktualisiereAnzeige auf, um die Anzeige der Einträge zu initialisieren.
